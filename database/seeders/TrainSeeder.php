@@ -9,7 +9,7 @@ use Faker\Factory as Faker;
 class TrainSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * 
      *
      * @return void
      */
@@ -17,16 +17,13 @@ class TrainSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        // Lista di nomi di aziende ferroviarie comuni
+        // Lista di nomi di aziende ferroviarie
         $aziende = [
             'Trenitalia', 'Italo', 'Trenord', 'Frecciarossa', 'Frecciargento', 
             'Nordest', 'Siciliana Trasporti', 'Toscana Railways', 'Lombardia Express', 'Alpina Rail'
         ];
 
-        // Lista delle città escluse
-        $excludedCities = ['Roma', 'Napoli', 'Milano', 'Venezia', 'Firenze'];
-
-        // Creazione dei primi 45 treni senza restrizioni
+        // Creazione dei 45 treni
         for ($i = 0; $i < 45; $i++) {
             Train::create([
                 'azienda' => $faker->randomElement($aziende),
@@ -41,19 +38,11 @@ class TrainSeeder extends Seeder
             ]);
         }
 
-        // Creazione di 5 treni con città di partenza e arrivo diverse da Roma, Napoli, Milano, Venezia e Firenze
+        // Creazione di 5 treni con città di partenza e arrivo specifiche
         for ($i = 0; $i < 5; $i++) {
-            // Genera una stazione di partenza non presente nelle città escluse
-            $stazioneDiPartenza = $faker->city;
-            while (in_array($stazioneDiPartenza, $excludedCities)) {
-                $stazioneDiPartenza = $faker->city;
-            }
-
-            // Genera una stazione di arrivo non presente nelle città escluse e diversa dalla stazione di partenza
-            $stazioneDiArrivo = $faker->city;
-            while (in_array($stazioneDiArrivo, $excludedCities) || $stazioneDiArrivo == $stazioneDiPartenza) {
-                $stazioneDiArrivo = $faker->city;
-            }
+            // Genera una stazione di partenza e arrivo 
+            $stazioneDiPartenza = $faker->unique()->city;
+            $stazioneDiArrivo = $faker->unique()->city;
 
             Train::create([
                 'azienda' => $faker->randomElement($aziende),
